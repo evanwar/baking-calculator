@@ -4,10 +4,10 @@ const recipes = {
         name: "Conchas",
         description: "Receta tradicional de conchas mexicanas con masa suave y cobertura crujiente",
         ingredients: [
-            { name: "Harina de trigo", amount: 500, unit: "g" },
+            { name: "Harina de trigo", amount: 560, unit: "g" },
             { name: "Sal", amount: 9, unit: "g" },
             { name: "Levadura Seca (Tradipan)", amount: 7, unit: "g" },
-            { name: "Leche tibia", amount: 220, unit: "g" },
+            { name: "Leche tibia", amount: 280, unit: "g" },
             { name: "Huevo", amount: 200, unit: "g", pieces: 2, pieceText: "piezas grandes" },
             { name: "Vainilla", amount: 5, unit: "g" },
             { name: "Azúcar", amount: 100, unit: "g" },
