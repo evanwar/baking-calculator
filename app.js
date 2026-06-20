@@ -70,6 +70,25 @@ const recipes = {
                 ]
             }
         ]
+    },
+        bocadillo: {
+        name: "Pah Hot Dog, Hamburguesa y Bocadillo",
+        description: "Receta para preparar pan de hot dog, hamburguesa y bocadillo con masa suave y esponjosa",
+        sections: [
+            {
+                title: "Masa Principal",
+                ingredients: [
+                    { name: "Harina de fuerza", amount: 340, unit: "g" },
+                    { name: "Leche en polvo", amount: 25, unit: "g" },
+                    { name: "Leche tibia", amount: 150, unit: "ml" },
+                    { name: "Huevos medianos", amount: 50, unit: "g", pieces: 1, pieceText: "huevos medianos" },
+                    { name: "Azúcar", amount: 40, unit: "g" },
+                    { name: "Sal", amount: 8, unit: "g" },
+                    { name: "Levadura seca", amount: 8, unit: "g (o 16 g fresca)" },
+                    { name: "Mantequilla suave", amount: 60, unit: "g" }
+                ]
+            }
+        ]
     }
 };
 
