@@ -1,263 +1,110 @@
-// Recetas base (1 tanda = receta original)
-const recipes = {
-    conchas: {
-        name: "Conchas",
-        description: "Receta tradicional de conchas mexicanas con masa suave y cobertura crujiente",
-        ingredients: [
-            { name: "Harina de trigo", amount: 500, unit: "g" },
-            { name: "Sal", amount: 9, unit: "g" },
-            { name: "Levadura Seca (Tradipan)", amount: 7, unit: "g" },
-            { name: "Leche tibia", amount: 220, unit: "g" },
-            { name: "Huevo", amount: 200, unit: "g", pieces: 2, pieceText: "piezas grandes" },
-            { name: "Vainilla", amount: 5, unit: "g" },
-            { name: "Azúcar", amount: 100, unit: "g" },
-            { name: "Mantequilla (temperatura ambiente)", amount: 75, unit: "g" },
-            { name: "Manteca de cerdo", amount: 25, unit: "g" }
-        ],
-        topping: [
-            { name: "Harina de trigo (cobertura)", amount: 100, unit: "g" },
-            { name: "Azúcar glass (cobertura)", amount: 100, unit: "g" },
-            { name: "Manteca vegetal tipo Inca (cobertura)", amount: 100, unit: "g" }
-        ]
-    },
-    donas: {
-        name: "Donas sin Huevo",
-        description: "Donas esponjosas y deliciosas sin huevo",
-        ingredients: [
-            { name: "Harina", amount: 600, unit: "g" },
-            { name: "Azúcar", amount: 80, unit: "g" },
-            { name: "Sal", amount: 6, unit: "g" },
-            { name: "Levadura", amount: 8, unit: "g" },
-            { name: "Leche", amount: 400, unit: "ml" },
-            { name: "Mantequilla", amount: 60, unit: "g" }
-        ],
-        topping: [
-            { name: "Azúcar glass (glaseado)", amount: 200, unit: "g" },
-            { name: "Leche (glaseado)", amount: 60, unit: "ml" },
-            { name: "Extracto de vainilla (glaseado)", amount: 5, unit: "ml" }
-        ]
-    },
-    roles: {
-        name: "Roles Esponjosos (Tangzhong)",
-        description: "Roles ultra suaves con técnica Tangzhong",
-        sections: [
-            {
-                title: "Tangzhong (Roux)",
-                ingredients: [
-                    { name: "Harina de fuerza", amount: 25, unit: "g" },
-                    { name: "Leche", amount: 125, unit: "ml" }
-                ]
-            },
-            {
-                title: "Masa Principal",
-                ingredients: [
-                    { name: "Harina de fuerza", amount: 475, unit: "g" },
-                    { name: "Leche en polvo", amount: 25, unit: "g" },
-                    { name: "Leche tibia", amount: 150, unit: "ml" },
-                    { name: "Huevos medianos", amount: 100, unit: "g", pieces: 2, pieceText: "huevos medianos" },
-                    { name: "Azúcar", amount: 80, unit: "g" },
-                    { name: "Sal", amount: 8, unit: "g" },
-                    { name: "Levadura seca", amount: 10, unit: "g (o 25 g fresca)" },
-                    { name: "Mantequilla suave", amount: 80, unit: "g" }
-                ]
-            },
-            {
-                title: "Relleno",
-                ingredients: [
-                    { name: "Mantequilla suavizada", amount: 40, unit: "g" },
-                    { name: "Azúcar morena", amount: 60, unit: "g" },
-                    { name: "Canela en polvo", amount: 10, unit: "g" }
-                ]
-            }
-        ]
-    },
-        bocadillo: {
-        name: "Pah Hot Dog, Hamburguesa y Bocadillo",
-        description: "Receta para preparar pan de hot dog, hamburguesa y bocadillo con masa suave y esponjosa",
-        sections: [
-            {
-                title: "Masa Principal",
-                ingredients: [
-                    { name: "Harina de fuerza", amount: 340, unit: "g" },
-                    { name: "Leche en polvo", amount: 25, unit: "g" },
-                    { name: "Leche tibia", amount: 150, unit: "ml" },
-                    { name: "Huevos medianos", amount: 50, unit: "g", pieces: 1, pieceText: "huevos medianos" },
-                    { name: "Azúcar", amount: 40, unit: "g" },
-                    { name: "Sal", amount: 8, unit: "g" },
-                    { name: "Levadura seca", amount: 8, unit: "g (o 16 g fresca)" },
-                    { name: "Mantequilla suave", amount: 60, unit: "g" }
-                ]
-            }
-        ]
-    }
-};
+/* Recipe data and calculations live in recipes.js and calculator.js. */
+(() => {
+  'use strict';
+  const { parseBatches, scaleRecipe, format, MIN_BATCHES, MAX_BATCHES } = BakingCalculator;
+  const $ = id => document.getElementById(id);
+  const state = { recipeKey: 'panDeCaja', batches: 1 };
+  const icons = {
+    concha: '<path d="M5 25C0 12 9 4 16 4s16 8 11 21Z"/><path d="M16 5v20M16 5C8 11 7 16 8 25M16 5c8 6 9 11 8 20M4 18h24M7 11h18"/>',
+    donut: '<circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="4"/><path d="m8 11 2 1m10-4 1 2m3 9-2 1m-8 4-2-1m-4-6 1-1m9 6 1-1"/>',
+    roll: '<path d="M26 23c-3 7-18 8-22-2C-1 8 11 1 22 6c11 5 7 18-1 19-8 2-15-4-13-10s12-7 14-1-6 9-8 4 4-4 4-1"/>',
+    bun: '<path d="M3 16C3 2 29 2 29 16ZM3 21h26v5H3ZM3 19h26M10 10l1-1m5 2 1-1m5 0 1-1"/>',
+    loaf: '<path d="M6 16C0 10 7 3 13 7c3-3 9-2 11 2 7-1 9 6 4 10v9H6Z"/><path d="M13 10v12m8-9v10M6 25h22"/>'
+  };
 
-let currentRecipe = null;
+  function renderPicker() {
+    $('recipeOptions').innerHTML = Object.entries(RECIPES).map(([key, recipe]) => `
+      <button type="button" class="recipe-option" data-recipe="${key}" aria-pressed="${key === state.recipeKey}">
+        <svg class="recipe-icon" viewBox="0 0 32 32" aria-hidden="true">${icons[recipe.icon]}</svg>
+        <strong>${recipe.shortName}</strong><small>${key === 'panDeCaja' ? 'Pan de leche' : recipe.category}</small>
+        <span class="selected-check" aria-hidden="true" ${key === state.recipeKey ? '' : 'hidden'}>✓</span>
+      </button>`).join('');
+  }
 
-function selectRecipe(recipeKey) {
-    currentRecipe = recipeKey;
-    
-    // Update button styles
-    document.querySelectorAll('.recipe-btn').forEach(btn => {
-        btn.classList.remove('bg-amber-600', 'text-white', 'ring-4', 'ring-amber-300');
-        btn.classList.add('bg-white', 'text-amber-800');
+  function renderRecipe() {
+    const recipe = RECIPES[state.recipeKey];
+    $('recipeName').textContent = recipe.name;
+    $('recipeCategory').textContent = recipe.category;
+    $('recipeDescription').textContent = recipe.description;
+    $('recipeNote').hidden = !recipe.note;
+    $('recipeNote').textContent = recipe.note || '';
+    $('recipeFacts').hidden = !recipe.yield;
+    $('recipeFacts').innerHTML = recipe.yield ? [
+      ['Por tanda', recipe.yield], ['Molde', recipe.mold], ['Horno', recipe.oven], ['Horneado', recipe.time]
+    ].map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join('') : '';
+    $('method').hidden = !recipe.steps;
+    $('methodSteps').innerHTML = (recipe.steps || []).map(step => `<li><h4>${step.title}</h4><p>${step.text}</p></li>`).join('');
+    $('recipeSource').textContent = recipe.source || '';
+    document.title = `${recipe.name} · Miga`;
+    renderCalculation();
+  }
+
+  function renderCalculation() {
+    const batches = parseBatches($('batchInput').value);
+    const valid = batches !== null;
+    $('batchInput').setAttribute('aria-invalid', String(!valid));
+    $('batchError').hidden = valid;
+    $('print').disabled = !valid;
+    $('decrease').disabled = valid && batches <= MIN_BATCHES;
+    $('increase').disabled = valid && batches >= MAX_BATCHES;
+    document.querySelectorAll('[data-batches]').forEach(button => {
+      button.setAttribute('aria-pressed', String(valid && Number(button.dataset.batches) === batches));
     });
-    
-    const selectedBtn = document.getElementById(`btn-${recipeKey}`);
-    selectedBtn.classList.remove('bg-white', 'text-amber-800');
-    selectedBtn.classList.add('bg-amber-600', 'text-white', 'ring-4', 'ring-amber-300');
-    
-    // Show recipe info
-    const recipe = recipes[recipeKey];
-    document.getElementById('recipeName').textContent = recipe.name;
-    document.getElementById('recipeDescription').textContent = recipe.description;
-    document.getElementById('recipeInfo').classList.remove('hidden');
-    
-    // Calculate ingredients
-    calculateIngredients();
-}
-
-function calculateIngredients() {
-    if (!currentRecipe) return;
-    
-    const batches = parseFloat(document.getElementById('batchInput').value) || 1;
-    const recipe = recipes[currentRecipe];
-    
-    let html = `
-        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-            </svg>
-            Ingredientes para ${batches} ${batches === 1 ? 'tanda' : 'tandas'}
-        </h3>
-    `;
-    
-    // Si la receta tiene secciones (como roles), renderizar por secciones
-    if (recipe.sections) {
-        recipe.sections.forEach((section, index) => {
-            html += `
-                <div class="mb-8">
-                    <h4 class="text-lg font-semibold text-amber-700 mb-4 pb-2 border-b-2 border-amber-200">
-                        ${['🌾', '🍞', '🧈'][index] || '📝'} ${section.title}
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            `;
-            
-            section.ingredients.forEach(ingredient => {
-                const calculatedAmount = (ingredient.amount * batches).toFixed(2);
-                const displayAmount = parseFloat(calculatedAmount) % 1 === 0 
-                    ? parseInt(calculatedAmount) 
-                    : calculatedAmount;
-                
-                // Calcular piezas si el ingrediente las tiene
-                let unitDisplay = ingredient.unit;
-                if (ingredient.pieces) {
-                    const totalPieces = ingredient.pieces * batches;
-                    unitDisplay = `${ingredient.unit} (≈ ${totalPieces} ${ingredient.pieceText})`;
-                }
-                    
-                html += `
-                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-amber-50 transition-colors">
-                        <span class="text-gray-700 font-medium">${ingredient.name}</span>
-                        <span class="text-amber-700 font-bold text-lg">${displayAmount} ${unitDisplay}</span>
-                    </div>
-                `;
-            });
-            
-            html += `
-                    </div>
-                </div>
-            `;
-        });
-    } else {
-        // Recetas tradicionales con ingredients + topping
-        html += `
-            <div class="mb-8">
-                <h4 class="text-lg font-semibold text-amber-700 mb-4 pb-2 border-b-2 border-amber-200">
-                    🍞 Masa Principal
-                </h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        `;
-        
-        recipe.ingredients.forEach(ingredient => {
-            const calculatedAmount = (ingredient.amount * batches).toFixed(2);
-            const displayAmount = parseFloat(calculatedAmount) % 1 === 0 
-                ? parseInt(calculatedAmount) 
-                : calculatedAmount;
-            
-            // Calcular piezas si el ingrediente las tiene
-            let unitDisplay = ingredient.unit;
-            if (ingredient.pieces) {
-                const totalPieces = ingredient.pieces * batches;
-                unitDisplay = `${ingredient.unit} (≈ ${totalPieces} ${ingredient.pieceText})`;
-            }
-                
-            html += `
-                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-amber-50 transition-colors">
-                    <span class="text-gray-700 font-medium">${ingredient.name}</span>
-                    <span class="text-amber-700 font-bold text-lg">${displayAmount} ${unitDisplay}</span>
-                </div>
-            `;
-        });
-        
-        html += `
-                </div>
-            </div>
-        `;
-        
-        // Agregar cobertura/glaseado si existe
-        if (recipe.topping) {
-            html += `
-                <div>
-                    <h4 class="text-lg font-semibold text-amber-700 mb-4 pb-2 border-b-2 border-amber-200">
-                        ✨ ${currentRecipe === 'donas' ? 'Glaseado' : 'Cobertura'}
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            `;
-            
-            recipe.topping.forEach(ingredient => {
-                const calculatedAmount = (ingredient.amount * batches).toFixed(2);
-                const displayAmount = parseFloat(calculatedAmount) % 1 === 0 
-                    ? parseInt(calculatedAmount) 
-                    : calculatedAmount;
-                
-                // Calcular piezas si el ingrediente las tiene
-                let unitDisplay = ingredient.unit;
-                if (ingredient.pieces) {
-                    const totalPieces = ingredient.pieces * batches;
-                    unitDisplay = `${ingredient.unit} (≈ ${totalPieces} ${ingredient.pieceText})`;
-                }
-                    
-                html += `
-                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-amber-50 transition-colors">
-                        <span class="text-gray-700 font-medium">${ingredient.name}</span>
-                        <span class="text-amber-700 font-bold text-lg">${displayAmount} ${unitDisplay}</span>
-                    </div>
-                `;
-            });
-            
-            html += `
-                    </div>
-                </div>
-            `;
-        }
+    if (!valid) {
+      $('ingredientsList').replaceChildren();
+      $('batchLabel').textContent = 'Cantidad pendiente';
+      $('scaleValue').textContent = '—';
+      $('checkProgress').textContent = 'Revisa la cantidad de tandas.';
+      $('calculationStatus').textContent = 'No se pueden calcular los ingredientes. Revisa las tandas.';
+      return;
     }
-    
-    html += `
-        <!-- Print Button -->
-        <div class="mt-8 text-center">
-            <button onclick="window.print()" 
-                class="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
-                🖨️ Imprimir Lista
-            </button>
-        </div>
-    `;
-    
-    document.getElementById('ingredientsList').innerHTML = html;
-}
+    state.batches = batches;
+    const sections = scaleRecipe(RECIPES[state.recipeKey], batches);
+    $('scaleValue').textContent = `× ${format(batches)}`;
+    $('batchLabel').textContent = `${format(batches)} ${batches === 1 ? 'tanda' : 'tandas'}`;
+    $('ingredientsList').innerHTML = sections.map((section, sectionIndex) => `
+      <section class="ingredient-section" aria-labelledby="section-${sectionIndex}">
+        <h4 id="section-${sectionIndex}"><span>${String(sectionIndex + 1).padStart(2, '0')}</span> ${section.title}</h4>
+        ${section.ingredients.map(ingredient => {
+          const equivalent = ingredient.alternative
+            ? `o ${format(ingredient.alternative.amount)} ${ingredient.alternative.unit} de ${ingredient.alternative.name}`
+            : ingredient.pieces ? `≈ ${format(ingredient.pieces)} ${ingredient.pieces === 1 ? 'huevo' : 'huevos'} · pesar` : '';
+          return `<label class="ingredient-row"><input type="checkbox"><span class="ingredient-name">${ingredient.name}</span><span class="ingredient-quantity">${format(ingredient.amount)} <small>${ingredient.unit}</small>${equivalent ? `<span class="equivalent">${equivalent}</span>` : ''}</span></label>`;
+        }).join('')}
+      </section>`).join('');
+    updateProgress();
+    $('calculationStatus').textContent = `${RECIPES[state.recipeKey].name}: ingredientes actualizados para ${format(batches)} ${batches === 1 ? 'tanda' : 'tandas'}. Lista de ingredientes reiniciada.`;
+  }
 
-// Initialize with default values
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('batchInput').value = 1;
-});
+  function updateProgress() {
+    const total = $('ingredientsList').querySelectorAll('input').length;
+    const ready = $('ingredientsList').querySelectorAll('input:checked').length;
+    $('checkProgress').textContent = `${ready} de ${total} ingredientes listos${ready === total ? ' · ¡A hornear!' : ''}`;
+  }
+
+  function setBatches(value) {
+    $('batchInput').value = String(Math.round(value * 100) / 100);
+    renderCalculation();
+  }
+
+  $('recipeOptions').addEventListener('click', event => {
+    const button = event.target.closest('[data-recipe]');
+    if (!button) return;
+    state.recipeKey = button.dataset.recipe;
+    document.querySelectorAll('[data-recipe]').forEach(option => {
+      const selected = option === button;
+      option.setAttribute('aria-pressed', String(selected));
+      option.querySelector('.selected-check').hidden = !selected;
+    });
+    renderRecipe();
+  });
+  $('batchInput').addEventListener('input', renderCalculation);
+  document.querySelectorAll('[data-batches]').forEach(button => button.addEventListener('click', () => setBatches(Number(button.dataset.batches))));
+  $('decrease').addEventListener('click', () => setBatches(Math.max(MIN_BATCHES, (parseBatches($('batchInput').value) ?? state.batches) - 0.25)));
+  $('increase').addEventListener('click', () => setBatches(Math.min(MAX_BATCHES, (parseBatches($('batchInput').value) ?? state.batches) + 0.25)));
+  $('reset').addEventListener('click', () => setBatches(1));
+  $('ingredientsList').addEventListener('change', updateProgress);
+  $('print').addEventListener('click', () => { if (parseBatches($('batchInput').value) !== null) window.print(); });
+  renderPicker();
+  renderRecipe();
+})();
