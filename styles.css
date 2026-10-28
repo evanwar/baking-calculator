@@ -16,3 +16,57 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media print{body{background:white;color:black;font-size:12pt}.site-header,.hero,.recipe-picker,.settings,.site-footer,.closing-note,.primary-button,#checklistHelp,#checkProgress,.skip-link{display:none!important}.wrap{max-width:none;padding:0}.workspace{display:block;margin:0}.recipe-detail{border:0;box-shadow:none;padding:0}.recipe-tag{display:none}.recipe-detail .eyebrow{color:black}.ingredient-row{min-height:35px;break-inside:avoid}.ingredient-row input{display:none}.ingredient-row:has(:checked) .ingredient-name{text-decoration:none;color:black}.ingredient-section h4{break-after:avoid}.method li{break-inside:avoid}.recipe-note{border:1px solid #ddd}.recipe-facts{grid-template-columns:repeat(4,1fr)}.recipe-description,.method li p,.help{color:#333}.ingredient-quantity{color:black}@page{margin:16mm}}
 @media screen and (max-width:760px){.ingredient-name{font-size:16px}.recipe-description{font-size:15px}.settings label{font-size:15px}.help,.recipe-note{font-size:13px}.method h4{font-size:15px}.method li p{font-size:14px}.baker-tip strong,.baker-tip p{font-size:12px}.recipe-option strong{font-size:14px}.recipe-option small{font-size:11px}.ingredient-quantity .equivalent{font-size:11px}.hero-copy>p:not(.eyebrow){font-size:16px}.presets button{font-size:13px}}
+
+/* Experimental formulation controls follow the same warm, responsive system. */
+.experiment-lab{margin-top:24px;border:1px solid #d4c8b7;border-radius:14px;background:var(--surface);overflow:hidden}
+.experiment-lab>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:19px 20px;background:#f5eee5;min-height:76px}
+.experiment-lab>summary::-webkit-details-marker{display:none}
+.experiment-lab>summary strong{display:block;font:400 24px/1.4 Georgia,serif;margin-top:3px}
+.experiment-lab>summary .eyebrow{font-size:9px}
+.lab-summary-hint{font-size:11px;color:var(--accent);display:flex;align-items:center;gap:12px}
+.lab-summary-hint>span{font-size:25px}
+.experiment-lab[open] .lab-summary-hint>span{transform:rotate(45deg)}
+.lab-body{padding:21px 20px}
+.lab-intro{font-size:14px;color:var(--muted);line-height:1.8}
+.lab-body fieldset{padding:0;border:0;min-width:0;margin:20px 0 0}
+.lab-body legend{font-size:13px;font-weight:600;margin-bottom:10px;padding:0}
+.experiment-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.experiment-choice{position:relative;display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);border-radius:10px;padding:12px 10px;cursor:pointer;min-height:66px}
+.experiment-choice input{margin:4px 0 0;accent-color:var(--green);flex-shrink:0;width:16px;height:16px}
+.experiment-choice strong{display:block;font-size:12px;font-weight:600;line-height:1.5}
+.experiment-choice small{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+.experiment-choice:has(:checked){border-color:var(--green);background:var(--green-soft)}
+.experiment-choice:has(:disabled){opacity:.6;cursor:not-allowed}
+.experiment-choice:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.lab-intensity label{display:inline-flex;align-items:center;gap:7px;font-size:12px;min-height:44px;margin-right:12px;cursor:pointer}
+.lab-intensity input{accent-color:var(--green)}
+.lab-intensity:disabled{opacity:.55}
+.experiment-result{border-top:1px solid var(--line);margin-top:22px;padding-top:21px}
+.lab-result-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.lab-result-title h3{font:400 24px Georgia,serif;color:var(--accent)}
+.lab-result-title button{background:none;border:0;color:var(--accent);text-decoration:underline;text-underline-offset:3px;font-size:12px;min-height:44px;padding:4px}
+.experiment-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;background:var(--green-soft);border-radius:10px;padding:14px;margin-top:13px}
+.experiment-metrics>div>span{display:block;font-size:11px;color:var(--muted)}
+.experiment-metrics strong{display:block;font-size:15px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+.experiment-metrics>.help{grid-column:1/-1;margin:0;font-size:10px}
+.lab-table{border-collapse:collapse;width:100%;font-size:12px;margin-top:20px;table-layout:fixed}
+.lab-table caption{text-align:left;font-size:13px;font-weight:600;margin-bottom:10px}
+.lab-table th,.lab-table td{padding:10px 5px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+.lab-table thead th{font-weight:600;color:var(--muted);font-size:11px}
+.lab-table th:first-child{width:47%;text-align:left;font-weight:500}
+.lab-table th:not(:first-child),.lab-table td{text-align:right;font-variant-numeric:tabular-nums}
+.lab-table tbody td:last-child{color:var(--accent);font-weight:600}
+.lab-table th small{display:block;font-size:10px;color:var(--muted);font-weight:400}
+.experiment-result h4{font-size:13px;margin-top:21px;font-weight:600}
+.experiment-result ul,.experiment-result ol,.lab-sources ul{margin:9px 0 0;padding-left:19px;font-size:12px;color:var(--muted);line-height:1.8}
+.experiment-result li+li{margin-top:8px}
+.lab-notes{background:var(--bg);border-radius:10px;padding:15px;margin-top:20px}
+.lab-notes h4{margin:0}
+.lab-sources{border-top:1px solid var(--line);margin-top:20px;padding-top:15px;color:var(--muted);font-size:12px}
+.lab-sources summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}
+.lab-sources p{margin-top:10px}
+.lab-sources a{text-underline-offset:3px;overflow-wrap:anywhere}
+@media(max-width:420px){.lab-summary-hint{font-size:0}.lab-body{padding:18px 14px}.experiment-lab>summary{padding:16px}.experiment-goals{grid-template-columns:1fr}.experiment-choice strong{font-size:14px}.experiment-choice small{font-size:12px}.lab-table{font-size:11px}.lab-intro{font-size:14px}}
+@media print{.experiment-lab:not(:has(.experiment-result:not([hidden]))){display:none}.experiment-lab>summary{background:none;padding:12px 0;pointer-events:none}.lab-summary-hint,.lab-goals,.lab-intensity,.lab-body>.help,.lab-intro,.lab-result-title button,.lab-sources{display:none!important}.lab-body{padding:0}.experiment-lab{border:0;overflow:visible}.lab-table tr,.lab-notes,.experiment-metrics{break-inside:avoid}.experiment-result{margin-top:0}.lab-table thead{display:table-header-group}.experiment-result ul,.experiment-result ol{color:#333}}
+#labActiveVariant{display:block;color:var(--accent);font-size:12px;margin-top:4px}
+.experiment-lab>summary:focus-visible,.lab-sources>summary:focus-visible{outline:3px solid var(--accent);outline-offset:-4px}

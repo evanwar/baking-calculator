@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="recipes.js" defer></script>
   <script src="calculator.js" defer></script>
+  <script src="experiments.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -60,6 +61,28 @@
       <article class="recipe-detail panel" aria-labelledby="recipeName">
         <div class="recipe-header"><div><p class="eyebrow" id="recipeCategory"></p><h2 id="recipeName"></h2></div><span class="recipe-tag" id="recipeTag">RECETA DE CASA</span></div>
         <p id="recipeDescription" class="recipe-description"></p>
+        <details id="experimentLab" class="experiment-lab">
+          <summary><span><span class="eyebrow">CIENCIA EN TU COCINA</span><strong>Laboratorio de pan</strong><small id="labActiveVariant" hidden></small></span><span class="lab-summary-hint">Explorar variantes <span aria-hidden="true">+</span></span></summary>
+          <div class="lab-body">
+            <p class="lab-intro">¿Cómo quieres que quede tu pan? Elige un objetivo y ajustaremos la fórmula, los ingredientes y el peso total.</p>
+            <fieldset class="lab-goals"><legend>Resultado que buscas</legend><div id="experimentGoals" class="experiment-goals"></div></fieldset>
+            <fieldset id="experimentIntensity" class="lab-intensity" disabled><legend>Intensidad del ajuste</legend><label><input type="radio" name="experimentLevel" value="1" checked> Moderado</label><label><input type="radio" name="experimentLevel" value="2"> Más marcado</label></fieldset>
+            <p class="help">Seleccionar una variante actualiza la lista directamente. Cada prueba parte de la receta base; los ajustes no se acumulan.</p>
+            <div id="experimentResult" class="experiment-result" hidden>
+              <div class="lab-result-title"><h3 id="experimentTitle"></h3><button id="restoreRecipe" type="button">Volver a la base ↺</button></div>
+              <p id="experimentBatch" class="help"></p>
+              <div id="experimentMetrics" class="experiment-metrics"></div>
+              <p class="help">Porcentajes sobre la harina de la masa (100 %). El agua se estima con leche 87 %, huevo 74 % y mantequilla 16 %; para líquidos se aproxima 1 ml a 1 g. Se excluyen coberturas y rellenos.</p>
+              <div class="lab-table-wrap"><table class="lab-table"><caption>Cambios de ingredientes para tus tandas</caption><thead><tr><th scope="col">Ingrediente</th><th scope="col">Base</th><th scope="col">Variante</th></tr></thead><tbody id="experimentChanges"></tbody></table></div>
+              <p id="experimentNoChanges" class="help" hidden>Se conserva la fórmula: ya cumple los límites de este ajuste. Sigue las recomendaciones de técnica.</p>
+              <h4>Qué cambia y por qué</h4><ul id="experimentScience"></ul>
+              <h4>Adapta tu preparación</h4><ol id="experimentTechnique"></ol>
+              <div class="lab-notes"><h4>Para interpretar tu prueba</h4><ul id="experimentNotes"></ul></div>
+              <p class="help">Son propuestas basadas en principios de panificación y reglas de prueba, no fórmulas validadas en horno ni predicciones exactas del volumen.</p>
+            </div>
+            <details class="lab-sources"><summary>Fundamento y fuentes</summary><p>El Tangzhong precocina almidón para retener agua. La red de gluten retiene el gas de fermentación; la grasa, el azúcar y la leche modifican la textura. Los límites y pasos de ajuste son decisiones de esta herramienta para experimentar, no resultados medidos.</p><ul><li><a href="https://www.kingarthurbaking.com/blog/2018/07/23/how-to-convert-a-bread-recipe-to-tangzhong" target="_blank" rel="noopener noreferrer">King Arthur Baking · Tangzhong y contenido de agua</a></li><li><a href="https://asbe.org/article/tangzhong-method/" target="_blank" rel="noopener noreferrer">American Society of Baking · Método Tangzhong</a></li><li><a href="https://pubs.nmsu.edu/_e/E206/index.html" target="_blank" rel="noopener noreferrer">New Mexico State University · Función de los ingredientes</a></li></ul></details>
+          </div>
+        </details>
         <div id="recipeFacts" class="recipe-facts" hidden></div>
         <section id="massEstimate" class="mass-estimate" aria-labelledby="massTitle" hidden>
           <div class="mass-heading"><div><h3 id="massTitle">Peso total aproximado</h3><p>Todos los ingredientes · antes de hornear</p></div><strong id="massTotal"></strong></div>

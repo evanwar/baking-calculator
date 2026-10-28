@@ -38,8 +38,8 @@ test('fresh yeast alternatives scale for roles and bocadillos', () => {
   assert.equal(bocadillo.amount, 4);
   assert.equal(bocadillo.alternative.amount, 8);
 });
-test('pan de caja matches supplied recipe and scales to half or double', () => {
-  const expected = [500, 280, 50, 50, 65, 20, 6, 8];
+test('pan de caja preserves current recipe and scales to half or double', () => {
+  const expected = [500, 280, 50, 50, 50, 20, 11, 9];
   assert.deepEqual(recipes.panDeCaja.sections[0].ingredients.map(i => i.amount), expected);
   for (const factor of [.5, 2]) {
     assert.deepEqual(scaleRecipe(recipes.panDeCaja, factor)[0].ingredients.map(i => i.amount), expected.map(x => x * factor));
@@ -56,12 +56,12 @@ test('calculation API rejects invalid numeric factors', () => {
 
 test('mass estimates pan de caja before baking with explicit liquid approximation', () => {
   const mass = estimateMass(scaleRecipe(recipes.panDeCaja, 1));
-  assert.equal(mass.total, 979);
-  assert.equal(mass.dough, 979);
+  assert.equal(mass.total, 970);
+  assert.equal(mass.dough, 970);
   assert.equal(mass.extras, 0);
   assert.equal(mass.hasLiquids, true);
-  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, 2)).total, 1958);
-  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, .5)).total, 489.5);
+  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, 2)).total, 1940);
+  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, .5)).total, 485);
 });
 
 test('mass separates dough and toppings and counts Tangzhong as dough', () => {

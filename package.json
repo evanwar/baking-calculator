@@ -3,5 +3,5 @@
   "version": "1.0.0",
   "private": true,
   "description": "Calculadora de panadería sin dependencias de producción",
-  "scripts": { "test": "node --test tests/calculator.test.js" }
+  "scripts": { "test": "node --test" }
 }
