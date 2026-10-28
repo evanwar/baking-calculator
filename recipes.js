@@ -78,8 +78,8 @@ const RECIPES = {
     sections: [{ title: 'Masa principal', ingredients: [
       { name: 'Harina de fuerza', amount: 500, unit: 'g' }, { name: 'Leche entera', amount: 280, unit: 'ml' },
       { name: 'Huevo sin cáscara', amount: 50, unit: 'g', pieces: 1 }, { name: 'Azúcar', amount: 50, unit: 'g' },
-      { name: 'Mantequilla sin sal', amount: 65, unit: 'g' }, { name: 'Leche en polvo', amount: 20, unit: 'g' },
-      { name: 'Levadura instantánea', amount: 6, unit: 'g' }, { name: 'Sal', amount: 8, unit: 'g' }
+      { name: 'Mantequilla sin sal', amount: 50, unit: 'g' }, { name: 'Leche en polvo', amount: 20, unit: 'g' },
+      { name: 'Levadura instantánea', amount: 11, unit: 'g' }, { name: 'Sal', amount: 9, unit: 'g' }
     ] }],
     steps: [
       { title: 'Mezcla los ingredientes', text: 'Combina la harina, leche, huevo, azúcar, leche en polvo, levadura y sal hasta que no queden partes secas.' },
