@@ -1,7 +1,7 @@
 /* Recipe data and calculations live in recipes.js and calculator.js. */
 (() => {
   'use strict';
-  const { parseBatches, scaleRecipe, format, MIN_BATCHES, MAX_BATCHES } = BakingCalculator;
+  const { parseBatches, scaleRecipe, estimateMass, format, MIN_BATCHES, MAX_BATCHES } = BakingCalculator;
   const $ = id => document.getElementById(id);
   const state = { recipeKey: 'panDeCaja', batches: 1 };
   const icons = {
@@ -51,6 +51,7 @@
       button.setAttribute('aria-pressed', String(valid && Number(button.dataset.batches) === batches));
     });
     if (!valid) {
+      $('massEstimate').hidden = true;
       $('ingredientsList').replaceChildren();
       $('batchLabel').textContent = 'Cantidad pendiente';
       $('scaleValue').textContent = '—';
@@ -60,6 +61,7 @@
     }
     state.batches = batches;
     const sections = scaleRecipe(RECIPES[state.recipeKey], batches);
+    const mass = renderMassEstimate(sections);
     $('scaleValue').textContent = `× ${format(batches)}`;
     $('batchLabel').textContent = `${format(batches)} ${batches === 1 ? 'tanda' : 'tandas'}`;
     $('ingredientsList').innerHTML = sections.map((section, sectionIndex) => `
@@ -73,7 +75,21 @@
         }).join('')}
       </section>`).join('');
     updateProgress();
-    $('calculationStatus').textContent = `${RECIPES[state.recipeKey].name}: ingredientes actualizados para ${format(batches)} ${batches === 1 ? 'tanda' : 'tandas'}. Lista de ingredientes reiniciada.`;
+    $('calculationStatus').textContent = `${RECIPES[state.recipeKey].name}: ingredientes actualizados para ${format(batches)} ${batches === 1 ? 'tanda' : 'tandas'}. Peso total aproximado: ${format(mass.total)} g. Lista de ingredientes reiniciada.`;
+  }
+
+  function renderMassEstimate(sections) {
+    const mass = estimateMass(sections);
+    const weight = grams => `${format(grams)} g${grams >= 1000 ? ` · ${format(grams / 1000)} kg` : ''}`;
+    $('massEstimate').hidden = false;
+    $('massTotal').textContent = `≈ ${weight(mass.total)}`;
+    const parts = mass.breakdown.filter(section => section.kind !== 'dough');
+    $('massBreakdown').hidden = parts.length === 0;
+    $('massBreakdown').innerHTML = parts.length ? [
+      { title: sections.filter(section => !section.kind || section.kind === 'dough').length > 1 ? 'Masa con Tangzhong' : 'Masa principal', grams: mass.dough }, ...parts
+    ].map(part => `<div><dt>${part.title}</dt><dd>≈ ${weight(part.grams)}</dd></div>`).join('') : '';
+    $('massHelp').textContent = `${mass.hasLiquids ? 'Para esta estimación usamos 1 ml de líquido ≈ 1 g. ' : ''}El peso final puede variar por restos en los utensilios y pérdida de humedad al hornear. Se usa la levadura indicada como principal.`;
+    return mass;
   }
 
   function updateProgress() {

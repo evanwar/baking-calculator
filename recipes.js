@@ -15,7 +15,7 @@ const RECIPES = {
         { name: 'Mantequilla a temperatura ambiente', amount: 75, unit: 'g' },
         { name: 'Manteca de cerdo', amount: 25, unit: 'g' }
       ] },
-      { title: 'Cobertura', ingredients: [
+      { title: 'Cobertura', kind: 'topping', ingredients: [
         { name: 'Harina de trigo', amount: 100, unit: 'g' },
         { name: 'Azúcar glass', amount: 100, unit: 'g' },
         { name: 'Manteca vegetal tipo Inca', amount: 100, unit: 'g' }
@@ -31,7 +31,7 @@ const RECIPES = {
         { name: 'Sal', amount: 6, unit: 'g' }, { name: 'Levadura', amount: 8, unit: 'g' },
         { name: 'Leche', amount: 400, unit: 'ml' }, { name: 'Mantequilla', amount: 60, unit: 'g' }
       ] },
-      { title: 'Glaseado', ingredients: [
+      { title: 'Glaseado', kind: 'topping', ingredients: [
         { name: 'Azúcar glass', amount: 200, unit: 'g' }, { name: 'Leche', amount: 60, unit: 'ml' },
         { name: 'Extracto de vainilla', amount: 5, unit: 'ml' }
       ] }
@@ -52,7 +52,7 @@ const RECIPES = {
         { name: 'Levadura seca', amount: 10, unit: 'g', alternative: { amount: 25, unit: 'g', name: 'levadura fresca' } },
         { name: 'Mantequilla suave', amount: 80, unit: 'g' }
       ] },
-      { title: 'Relleno', ingredients: [
+      { title: 'Relleno', kind: 'filling', ingredients: [
         { name: 'Mantequilla suavizada', amount: 40, unit: 'g' },
         { name: 'Azúcar morena', amount: 60, unit: 'g' }, { name: 'Canela en polvo', amount: 10, unit: 'g' }
       ] }

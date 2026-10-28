@@ -18,6 +18,8 @@ Con Node.js instalado, ejecuta `npm test` o `node --test tests/calculator.test.j
 
 Una tanda corresponde a la receta original. Se aceptan cantidades entre 0.01 y 100, con punto o coma decimal. Los datos vacíos, negativos, cero, infinitos o con texto no producen una receta calculada. Las cantidades se multiplican desde la receta base y solo se redondean para mostrarlas, hasta dos decimales. Las alternativas de levadura y las equivalencias aproximadas de huevo también se escalan. Gramos y mililitros se conservan como unidades diferentes.
 
+El apartado de peso total estima la suma de todos los ingredientes antes de hornear. Para este cálculo aproximado se considera 1 ml de líquido como 1 g; no se convierten las cantidades de la lista. Se desglosan masa (incluido Tangzhong), cobertura, glaseado o relleno cuando corresponde. No se suman dos veces las piezas de huevo ni las alternativas de levadura. El peso no descuenta restos en utensilios ni pérdida de humedad. Una tanda de pan de caja estima 979 g y dos tandas, 1958 g.
+
 Al cambiar la receta o las tandas se reinicia la lista marcada para evitar confundir cantidades anteriores con las nuevas. La impresión incluye ingredientes y, cuando existe, el procedimiento; omite los controles.
 
 ## Recetas

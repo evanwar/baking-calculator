@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const recipes = require('../recipes.js');
-const { parseBatches, scaleRecipe } = require('../calculator.js');
+const { parseBatches, scaleRecipe, estimateMass } = require('../calculator.js');
 
 test('rejects empty, zero, negative, out-of-range and malformed batches', () => {
   for (const input of ['', ' ', '0', '-1', 'Infinity', 'NaN', '2abc', '1.2.3', '1e2', '100.01', '0.001']) {
@@ -52,4 +52,35 @@ test('calculation API rejects invalid numeric factors', () => {
   for (const factor of [0, -1, NaN, Infinity, 101, '2', null]) {
     assert.throws(() => scaleRecipe(recipes.panDeCaja, factor), RangeError);
   }
+});
+
+test('mass estimates pan de caja before baking with explicit liquid approximation', () => {
+  const mass = estimateMass(scaleRecipe(recipes.panDeCaja, 1));
+  assert.equal(mass.total, 979);
+  assert.equal(mass.dough, 979);
+  assert.equal(mass.extras, 0);
+  assert.equal(mass.hasLiquids, true);
+  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, 2)).total, 1958);
+  assert.equal(estimateMass(scaleRecipe(recipes.panDeCaja, .5)).total, 489.5);
+});
+
+test('mass separates dough and toppings and counts Tangzhong as dough', () => {
+  const conchas = estimateMass(scaleRecipe(recipes.conchas, 1));
+  assert.equal(conchas.dough, 1141);
+  assert.equal(conchas.extras, 300);
+  assert.equal(conchas.total, 1441);
+  assert.equal(conchas.hasLiquids, false);
+  const roles = estimateMass(scaleRecipe(recipes.roles, 1));
+  assert.equal(roles.dough, 1078);
+  assert.equal(roles.extras, 110);
+  assert.equal(roles.total, 1188);
+  const donas = estimateMass(scaleRecipe(recipes.donas, 1));
+  assert.equal(donas.dough, 1154);
+  assert.equal(donas.extras, 265);
+  assert.equal(donas.total, 1419);
+});
+
+test('mass does not double-count egg equivalents or alternative yeast', () => {
+  assert.equal(estimateMass(scaleRecipe(recipes.bocadillo, 1)).total, 681);
+  assert.throws(() => estimateMass([{ title: 'Unknown', ingredients: [{ amount: 1, unit: 'cup' }] }]), TypeError);
 });

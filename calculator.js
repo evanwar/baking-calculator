@@ -28,6 +28,29 @@ const BakingCalculator = (() => {
     }));
   }
 
-  return { MIN_BATCHES, MAX_BATCHES, parseBatches, scaleRecipe, format: value => formatter.format(value) };
+  /** Pre-baking estimate: liquids use the explicit approximation 1 ml ≈ 1 g.
+   * Alternatives and egg counts describe the same ingredient, so are not added.
+   */
+  function estimateMass(sections) {
+    const breakdown = sections.map(section => ({
+      title: section.title,
+      kind: section.kind || 'dough',
+      grams: section.ingredients.reduce((sum, ingredient) => {
+        if (!['g', 'ml'].includes(ingredient.unit)) {
+          throw new TypeError(`Unidad no compatible: ${ingredient.unit}`);
+        }
+        return sum + ingredient.amount;
+      }, 0)
+    }));
+    return {
+      total: breakdown.reduce((sum, section) => sum + section.grams, 0),
+      dough: breakdown.filter(section => section.kind === 'dough').reduce((sum, section) => sum + section.grams, 0),
+      extras: breakdown.filter(section => section.kind !== 'dough').reduce((sum, section) => sum + section.grams, 0),
+      hasLiquids: sections.some(section => section.ingredients.some(ingredient => ingredient.unit === 'ml')),
+      breakdown
+    };
+  }
+
+  return { MIN_BATCHES, MAX_BATCHES, parseBatches, scaleRecipe, estimateMass, format: value => formatter.format(value) };
 })();
 if (typeof module !== 'undefined') module.exports = BakingCalculator;
